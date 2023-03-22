@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, forkJoin, Subject, takeUntil } from 'rxjs';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { Campagne, Media } from 'src/app/shared/models/playload-rmp';
 import { PlayloadService } from 'src/app/shared/services/playload.service';
 import {
@@ -24,6 +24,10 @@ export class BrandEditComponent implements OnDestroy {
   mediaList?: Media[];
   private destroy$ = new Subject();
 
+  get mediaControl() {
+    return this.requestForm?.controls['media'] as FormControl;
+  }
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private playloadService: PlayloadService,
@@ -36,7 +40,7 @@ export class BrandEditComponent implements OnDestroy {
       media: new FormControl([], [Validators.required]),
       decisionDeadline: new FormControl('', [Validators.required]),
     });
-    forkJoin([
+    combineLatest([
       this.playloadService.getPlayloadRmp(),
       this.playloadService.getBrands(),
     ])

@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { first, forkJoin, Subject, takeUntil } from 'rxjs';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { Brand } from 'src/app/shared/models/brand';
 import { PlayloadRmp } from 'src/app/shared/models/playload-rmp';
 import { PlayloadService } from 'src/app/shared/services/playload.service';
@@ -16,7 +16,7 @@ export class BrandListComponent implements OnDestroy {
   private destroy$ = new Subject();
 
   constructor(private playloadService: PlayloadService) {
-    forkJoin([
+    combineLatest([
       this.playloadService.getPlayloadRmp(),
       this.playloadService.getBrands(),
     ])

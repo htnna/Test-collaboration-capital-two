@@ -57,19 +57,18 @@
           !requestForm.controls['campaignName'].valid &&
           requestForm.controls['campaignName'].touched
         "
-        >Campaign name</small
+        >Campaign name is required</small
       >
     </div>
     <div class="field w-full flex flex-column">
       <label for="media">Media&nbsp;*</label>
-      <div class="mb-2" *ngFor="let a of mediaList">
+      <div class="field-checkbox" *ngFor="let a of mediaList">
         <p-checkbox
-          name="group2"
-          value="a"
+          name="group{{ a.mediaId }}"
           [value]="a"
-          formControlName="media"
-          [inputId]="a.mediaId?.toString() ?? ''"
-          class="mr-2"
+          [formControl]="mediaControl"
+          inputId="{{ a.name }}"
+          *ngIf="mediaControl"
         ></p-checkbox>
         <label [for]="a">{{ a.value }}</label>
       </div>
