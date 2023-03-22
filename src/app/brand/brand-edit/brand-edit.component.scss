@@ -1,0 +1,15 @@
+:host ::ng-deep .min-width-400p {
+  width: 400px !important;
+  input {
+    width: 400px !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :host ::ng-deep .min-width-400p {
+    width: 250px !important;
+    input {
+      width: 250px !important;
+    }
+  }
+}

@@ -1,0 +1,132 @@
+<div class="flex flex-column m-4">
+  <div>
+    <h1>All requests</h1>
+  </div>
+  <div *ngIf="playload && playload.requests">
+    <p-table
+      #dt
+      [value]="playload.requests"
+      [rows]="10"
+      [paginator]="true"
+      [globalFilterFields]="[
+        'requestStatus.value',
+        'campaignName',
+        'brand.name',
+        'advice',
+        'submittedDate'
+      ]"
+      responsiveLayout="stack"
+    >
+      <ng-template pTemplate="caption">
+        <div
+          class="flex flex-column lg:flex-row xl:flex-row align-items-center"
+        >
+          <span class="mr-0 lg:mr-4 xl:mr-4 mb-4 lg:mb-0 xl:mb-0">FILTERS</span>
+          <span
+            class="p-input-icon-left mr-0 lg:mr-4 xl:mr-4 mb-4 lg:mb-0 xl:mb-0 w-full lg:w-max xl:w-max"
+          >
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              #textInput
+              (input)="dt.filterGlobal(textInput.value, 'contains')"
+              class="w-full"
+              placeholder=""
+            />
+          </span>
+          <p-columnFilter
+            field="brand.name"
+            matchMode="equals"
+            [showMenu]="false"
+            class="w-full lg:w-max xl:w-max"
+          >
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-dropdown
+                [ngModel]="value"
+                [options]="brandNames"
+                (onChange)="filter($event.value)"
+                placeholder="Brand"
+                [showClear]="true"
+                *ngIf="brandNames"
+              >
+                <ng-template let-option pTemplate="item">
+                  <span>{{ option.label }}</span>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Status</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Brand</th>
+          <th>Submission</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-request>
+        <tr [routerLink]="[request.requestId]">
+          <td class="border-left-1 border-round-left-lg">
+            <div
+              class="flex justify-content-center flex-column"
+              [class.green-status]="request.requestStatus.requestStatusId === 6"
+              [class.red-status]="request.requestStatus.requestStatusId === 2"
+            >
+              <span class="flex justify-content-center mb-2">
+                <ng-container
+                  [ngSwitch]="request.requestStatus.requestStatusId"
+                >
+                  <i class="pi pi-times-circle text-2xl" *ngSwitchCase="2"></i>
+                  <i class="pi pi-file text-2xl" *ngSwitchCase="3"></i>
+                  <i class="pi pi-file-edit text-2xl" *ngSwitchCase="4"></i>
+                  <i class="pi pi-eye text-2xl" *ngSwitchCase="5"></i>
+                  <i class="pi pi-check-circle text-2xl" *ngSwitchCase="6"></i>
+                  <i class="pi pi-hourglass text-2xl" *ngSwitchDefault></i>
+                </ng-container>
+              </span>
+              <span class="flex justify-content-center">
+                {{ request.requestStatus.value }}
+              </span>
+            </div>
+          </td>
+          <td>{{ request.campaignName }}</td>
+          <td class="uppercase">
+            <p-tag
+              value="{{ request.advice ? 'Advice' : 'Request' }}"
+              styleClass="border-noround capitalize {{
+                request.advice ? 'bg-pink-300' : 'bg-gray-400'
+              }}"
+            >
+            </p-tag>
+          </td>
+          <td>{{ request.brand.name }}</td>
+          <td>
+            {{ request.submittedDate | date : "MMMM d"
+            }}{{ getOrdinalDay(request.submittedDate) }}&nbsp;{{
+              request.submittedDate | date : "y"
+            }}
+          </td>
+          <td class="border-right-1 border-round-right-lg">
+            <div class="flex justify-content-end">
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-chevron-right"
+                class="p-button-text"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

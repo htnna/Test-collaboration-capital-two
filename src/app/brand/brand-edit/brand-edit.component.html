@@ -1,0 +1,110 @@
+<div class="flex flex-column m-4">
+  <div class="flex">
+    <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-arrow-left"
+      class="p-button-text mr-2"
+      type="button"
+      [routerLink]="['../../']"
+    ></button>
+    <h1>Details</h1>
+  </div>
+  <form
+    [formGroup]="requestForm"
+    #ngForm="ngForm"
+    (ngSubmit)="save()"
+    *ngIf="requestForm"
+  >
+    <div class="field w-full flex flex-column">
+      <label for="brand">Brand&nbsp;*</label>
+      <p-dropdown
+        id="brand"
+        [options]="brands"
+        formControlName="brand"
+        optionLabel="name"
+        aria-describedby="brand-help"
+        styleClass="min-width-400p"
+        *ngIf="brands"
+      ></p-dropdown>
+      <small
+        id="brand-help"
+        class="p-error block pl-2"
+        *ngIf="
+          !requestForm.controls['brand'].valid &&
+          requestForm.controls['brand'].touched
+        "
+        >Brand is required</small
+      >
+    </div>
+    <div class="field w-full flex flex-column">
+      <label for="campaignName">Campaign name&nbsp;*</label>
+      <input
+        id="campaignName"
+        class="h-full"
+        type="text"
+        pInputText
+        formControlName="campaignName"
+        autocomplete="off"
+        aria-describedby="campaignName-help"
+        class="min-width-400p"
+      />
+      <small
+        id="campaignName-help"
+        class="p-error block pl-2"
+        *ngIf="
+          !requestForm.controls['campaignName'].valid &&
+          requestForm.controls['campaignName'].touched
+        "
+        >Campaign name</small
+      >
+    </div>
+    <div class="field w-full flex flex-column">
+      <label for="media">Media&nbsp;*</label>
+      <div class="mb-2" *ngFor="let a of mediaList">
+        <p-checkbox
+          name="group2"
+          value="a"
+          [value]="a"
+          formControlName="media"
+          [inputId]="a.mediaId?.toString() ?? ''"
+          class="mr-2"
+        ></p-checkbox>
+        <label [for]="a">{{ a.value }}</label>
+      </div>
+      <small
+        id="media-help"
+        class="p-error block pl-2"
+        *ngIf="
+          !requestForm.controls['media'].valid &&
+          requestForm.controls['media'].touched
+        "
+        >Media is required</small
+      >
+    </div>
+    <div class="field w-full flex flex-column">
+      <label for="decisionDeadline">Deadline for decision&nbsp;*</label>
+      <p-calendar
+        id="decisionDeadline"
+        formControlName="decisionDeadline"
+        aria-describedby="decisionDeadline-help"
+        styleClass="min-width-400p"
+        dateFormat="dd MM yy"
+        styleClass="min-width-400p"
+      ></p-calendar>
+      <small
+        id="decisionDeadline-help"
+        class="p-error block pl-2"
+        *ngIf="
+          !requestForm.controls['decisionDeadline'].valid &&
+          requestForm.controls['decisionDeadline'].touched
+        "
+        >Deadline for decision is required</small
+      >
+    </div>
+    <div class="w-full mt-4 flex justify-content-end flex-1">
+      <button pButton pRipple label="Save" type="submit"></button>
+    </div>
+  </form>
+</div>
